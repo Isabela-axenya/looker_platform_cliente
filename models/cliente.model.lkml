@@ -8,7 +8,6 @@ datagroup: cliente_default_datagroup {
 
 persist_with: cliente_default_datagroup
 
-
 #############################
 # EXPLORE: AFASTADOS COM SOC
 #############################
