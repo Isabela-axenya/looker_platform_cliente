@@ -955,6 +955,9 @@ view: sinistros {
     type: number
     sql: -1 * COUNT(DISTINCT CASE WHEN INITCAP(${genero}) = 'Masculino' THEN ${beneficiary_id} END) ;;
     value_format: "#,##0"
+    html: {% assign val = male_count_negative._value | abs %}
+    {{ val }}
+    ;;
   }
   measure: female_count {
     type: count_distinct
