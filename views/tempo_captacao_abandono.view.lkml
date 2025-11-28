@@ -1,7 +1,7 @@
 view: tempo_captacao_abandono {
   derived_table: {
     sql:
-    WITH status_ordenado AS (
+     WITH status_ordenado AS (
       SELECT
         person_id,
         status_monitoramento,
@@ -25,12 +25,12 @@ view: tempo_captacao_abandono {
           ) AS rn
         FROM status_ordenado s
         WHERE s.status_monitoramento IN (
-          'ACQUISITION',
-          'BEING_MONITORED',
-          'COORDINATED',
-          'MONITORING_DIFFICULTY_1',
-          'MONITORING_DIFFICULTY_2',
-          'PENDING_MONITORING_HR'
+          'CAPTADO','ACQUISITION',
+          'MONITORADO','BEING_MONITORED',
+          'COORDENADO','COORDINATED',
+          'DIFICULDADE_DE_MONITORAMENTO_1',
+          'DIFICULDADE_DE_MONITORAMENTO_2',
+          'MONITORAMENTO_PENDENTE_RH'
         )
       ) t
       WHERE rn = 1
@@ -42,10 +42,10 @@ view: tempo_captacao_abandono {
         MIN(CAST(s.status_criado AS TIMESTAMP)) AS inicio_abandono
       FROM status_ordenado s
       WHERE s.status_monitoramento IN (
-        'MONITORING_ABANDONED',
-        'ACQUISITION_ABANDONED',
+        'ABANDONO_MONITORAMENTO',
+        'ABANDONO_CAPTACAO',
         'SELF_DISCHARGED',
-        'DISCHARGED',
+        'ALTA','DISCHARGED'
         'NON_ENGEGEMENT'
       )
       GROUP BY s.person_id, s.status_monitoramento

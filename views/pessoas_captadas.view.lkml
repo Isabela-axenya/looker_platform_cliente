@@ -18,7 +18,7 @@ view: pessoas_captadas {
         AND qr.question_key = 'patient_plan'
         AND qr.answer_value = '1'
         AND qr.applied_questionnaire_status = 'COMPLETED'
-        AND ms.status = 'ACQUISITION'
+        AND ms.status IN ('CAPTADO', 'ACQUISITION')
         AND p.deleted_at IS NULL
         AND DATE(qr.created_at) = DATE(ms.created_at)
       ;;

@@ -139,6 +139,7 @@ view: gerencial_monitoramento {
   }
 
 ############## Cálculo de taxa de engajamento
+
 # --- Dimensão: status válido no mês da ligação ---
 
   dimension: status_monitoramento_valido_no_mes {
@@ -147,15 +148,15 @@ view: gerencial_monitoramento {
     sql:
     CASE
       WHEN ${status_monitoramento} IN (
-        "BEING_MONITORED",
-        "ACQUISITION_DIFFICULTY_1",
-        "ACQUISITION",
-        "ACQUISITION_DIFFICULTY_2",
-        "PENDING_ACQUISITION_HR",
-        "COORDINATED",
-        "MONITORING_DIFFICULTY_1",
-        "MONITORING_DIFFICULTY_2",
-        "PENDING_MONITORING_HR"
+        "MONITORADO", "BEING_MONITORED"                       -- BEING_MONITORED
+        "DIFICULDADE_DE_CAPTACAO_1", "ACQUISITION_DIFFICULTY_1" ,       -- ACQUISITION_DIFFICULTY_1
+        "CAPTADO", "ACQUISITION" ,                         -- ACQUISITION
+        "DIFICULDADE_DE_CAPTACAO_2", "ACQUISITION_DIFFICULTY_2",        -- ACQUISITION_DIFFICULTY_2
+        "CAPTACAO_PENDENTE_RH", "PENDING_ACQUISITION_HR",             -- PENDING_ACQUISITION_HR
+        "COORDENADO",  "COORDINATED",                     -- COORDINATED
+        "DIFICULDADE_DE_MONITORAMENTO_1", "MONITORING_DIFFICULTY_1",  -- MONITORING_DIFFICULTY_1
+        "DIFICULDADE_DE_MONITORAMENTO_2", "MONITORING_DIFFICULTY_2",  -- MONITORING_DIFFICULTY_2
+        "PENDING_MONITORING_HR", "MONITORAMENTO_PENDENTE_RH"         -- PENDING_MONITORING_HR
       )
       AND DATE_TRUNC(DATE(${TABLE}.data_ligacao), MONTH)
           BETWEEN DATE_TRUNC(DATE(${TABLE}.status_criado), MONTH)
@@ -193,49 +194,61 @@ view: gerencial_monitoramento {
   }
 
 #### Tradução de Status Monitoramento
+
   dimension: status_monitoramento_pt {
     label: "Status de Monitoramento PT"
     type: string
     sql:
     CASE
-      WHEN ${status_monitoramento} = 'ACQUISITION' THEN 'Captado'
-      WHEN ${status_monitoramento} = 'ACQUISITION_ABANDONED' THEN 'Abandono aquisição'
-      WHEN ${status_monitoramento} = 'ACQUISITION_DIFFICULTY_1' THEN 'Dificuldade de Captação 1'
-      WHEN ${status_monitoramento} = 'ACQUISITION_DIFFICULTY_2' THEN 'Dificuldade de Captação 2'
-      WHEN ${status_monitoramento} = 'BEING_MONITORED' THEN 'Monitorado'
-      WHEN ${status_monitoramento} = 'COORDINATED' THEN 'Coordenado'
-      WHEN ${status_monitoramento} = 'DECLINED' THEN 'Recusado'
-      WHEN ${status_monitoramento} = 'DISCHARGED' THEN 'Alta'
-      WHEN ${status_monitoramento} = 'ELIGIBLE' THEN 'Em Captação'
-      WHEN ${status_monitoramento} = 'INACTIVE' THEN 'Inativo'
-      WHEN ${status_monitoramento} = 'MONITORING_ABANDONED' THEN 'Abandono monitoramento'
-      WHEN ${status_monitoramento} = 'MONITORING_DIFFICULTY_1' THEN 'Dificuldade de Monitoramento 1'
-      WHEN ${status_monitoramento} = 'MONITORING_DIFFICULTY_2' THEN 'Dificuldade de Monitoramento 2'
-      WHEN ${status_monitoramento} = 'NON_ENGAGEMENT' THEN 'Abandono aquisição'
-      WHEN ${status_monitoramento} = 'NOT_ELIGIBLE' THEN 'Não Elegível'
-      WHEN ${status_monitoramento} = 'PENDING_ACQUISITION_HR' THEN 'Dificuldade captação pendente RH'
-      WHEN ${status_monitoramento} = 'PENDING_MONITORING_HR' THEN 'Dificuldade monitoramento pendente RH'
-      WHEN ${status_monitoramento} = 'SELF_DISCHARGED' THEN 'Alta'
-      WHEN ${status_monitoramento} = 'UNREACHABLE' THEN 'Dificuldade de Captação 1'
+      WHEN ${status_monitoramento} = 'NOVO_PACIENTE'                    THEN 'Novo Paciente'
+      WHEN ${status_monitoramento} = 'DIFICULDADE_DE_CAPTACAO_1'       THEN 'Dificuldade de Captação 1'
+      WHEN ${status_monitoramento} = 'CAPTACAO_PENDENTE_RH'            THEN 'Captação pendente RH'
+      WHEN ${status_monitoramento} = 'DIFICULDADE_DE_CAPTACAO_2'       THEN 'Dificuldade de Captação 2'
+      WHEN ${status_monitoramento} = 'CAPTADO'                         THEN 'Captado'
+      WHEN ${status_monitoramento} = 'MONITORADO'                      THEN 'Monitorado'
+      WHEN ${status_monitoramento} = 'COORDENADO'                      THEN 'Coordenado'
+      WHEN ${status_monitoramento} = 'DIFICULDADE_DE_MONITORAMENTO_1'  THEN 'Dificuldade de monitoramento 1'
+      WHEN ${status_monitoramento} = 'MONITORAMENTO_PENDENTE_RH'       THEN 'Monitoramento pendente RH'
+      WHEN ${status_monitoramento} = 'DIFICULDADE_DE_MONITORAMENTO_2'  THEN 'Dificuldade de monitoramento 2'
+      WHEN ${status_monitoramento} = 'ABANDONO_CAPTACAO'               THEN 'Abandono Captação'
+      WHEN ${status_monitoramento} = 'ABANDONO_MONITORAMENTO'          THEN 'Abandono Monitoramento'
+      WHEN ${status_monitoramento} = 'INATIVO'                         THEN 'Inativo'
+      WHEN ${status_monitoramento} = 'REJEITADO'                       THEN 'Rejeitado'
+      WHEN ${status_monitoramento} = 'ALTA'                            THEN 'Alta'
+      WHEN ${status_monitoramento} = 'RECUSA'                          THEN 'Recusa'
+      WHEN ${status_monitoramento} = 'CAPTACAO_EM_ANDAMENTO'                          THEN 'Captação em andamento'
+      WHEN ${status_monitoramento} = 'ELIGIBLE'                         THEN 'Novo Paciente'
+      WHEN ${status_monitoramento} = 'ACQUISITION'                         THEN 'Captado'
+      WHEN ${status_monitoramento} = 'BEING_MONITORED'                         THEN 'Monitorado'
+      WHEN ${status_monitoramento} = 'COORDINATED'                         THEN 'Coordenado'
+      WHEN ${status_monitoramento} = 'DECLINED'                         THEN 'Recusa'
+      WHEN ${status_monitoramento} = 'DISCHARGED'                         THEN 'Alta'
+      WHEN ${status_monitoramento} = 'INACTIVE'                         THEN 'Inativo'
+      WHEN ${status_monitoramento} = 'NOT_ELIGIBLE'                         THEN 'Rejeitado'
+      WHEN ${status_monitoramento} = 'NON_ENGAGEMENT'                         THEN 'Abandono Captação'
+      WHEN ${status_monitoramento} = 'SELF_DISCHARGED'                         THEN 'Alta'
+      WHEN ${status_monitoramento} = 'UNREACHABLE'                         THEN 'Dificuldade de Captação 1'
+
       ELSE ${status_monitoramento}
-    END
-  ;;
+      END ;;
   }
 
 
-  ##### % Altas (Monitoramento)
+##### % Altas (Monitoramento)
+
   measure: distinct_discharged {
     label: "Pessoas com Alta"
     type: count_distinct
     sql: ${person_id} ;;
-    filters: [status_monitoramento: "SELF_DISCHARGED, DISCHARGED"]
+    filters: [status_monitoramento: "SELF_DISCHARGED, ALTA, DISCHARGED"]
   }
 
   measure: distinct_discharged_base {
     label: "Base de Avaliação (Altas)"
     type: count_distinct
     sql: ${person_id} ;;
-    filters: [status_monitoramento: "SELF_DISCHARGED, DISCHARGED, BEING_MONITORED, ACQUISITION, COORDINATED, MONITORING_DIFFICULTY_1, MONITORING_DIFFICULTY_2, PENDING_MONITORING_HR"]
+    filters: [status_monitoramento:"ALTA, SELF_DISCHARGED, DISCHARGED,MONITORADO, BEING_MONITORED,ACQUISITION, CAPTADO, COORDENADO, COORDINATED,DIFICULDADE_DE_MONITORAMENTO_1, DIFICULDADE_DE_MONITORAMENTO_2, MONITORAMENTO_PENDENTE_RH"]
+
   }
 
   measure: discharge_rate {
@@ -245,20 +258,21 @@ view: gerencial_monitoramento {
     sql: ${distinct_discharged} / NULLIF(${distinct_discharged_base}, 0) ;;
   }
 
-  ##### % Abandonos (Monitoramento)
+##### % Abandonos (Monitoramento)
   measure: distinct_abandoned {
     label: "Pessoas com Abandono"
     type: count_distinct
     sql: ${person_id} ;;
-    filters: [status_monitoramento: "ACQUISITION_ABANDONED, MONITORING_ABANDONED"]
+    filters: [status_monitoramento: "NON_ENGAGEMENT, ABANDONO_CAPTACAO, ABANDONO_MONITORAMENTO"]
   }
 
   measure: distinct_abandoned_base {
     label: "Base de Avaliação (Abandonos)"
     type: count_distinct
     sql: ${person_id} ;;
-    filters: [status_monitoramento: "ACQUISITION_ABANDONED, MONITORING_ABANDONED, BEING_MONITORED, ACQUISITION, COORDINATED, MONITORING_DIFFICULTY_1, MONITORING_DIFFICULTY_2, PENDING_MONITORING_HR"]
+    filters: [status_monitoramento: "NON_ENGAGEMENT, ABANDONO_CAPTACAO, ABANDONO_MONITORAMENTO,MONITORADO, BEING_MONITORED,ACQUISITION, CAPTADO, COORDENADO, COORDINATED,DIFICULDADE_DE_MONITORAMENTO_1, DIFICULDADE_DE_MONITORAMENTO_2, MONITORAMENTO_PENDENTE_RH"]
   }
+
 
   measure: abandonment_rate {
     label: "% Abandonos no Monitoramento"
@@ -274,28 +288,49 @@ view: gerencial_monitoramento {
   dimension: is_em_contato {
     label: "Grupo: Em Contato"
     type: yesno
-    sql: ${status_monitoramento} IN ('BEING_MONITORED', 'ACQUISITION_DIFFICULTY_1', 'ACQUISITION', 'ACQUISITION_DIFFICULTY_2', 'PENDING_ACQUISITION_HR', 'COORDINATED', 'MONITORING_DIFFICULTY_1', 'MONITORING_DIFFICULTY_2', 'PENDING_MONITORING_HR') ;;
+    sql: ${status_monitoramento} IN (
+          'MONITORADO','BEING_MONITORED','CAPTADO','ACQUISITION','COORDENADO', 'COORDINATED',
+          'DIFICULDADE_DE_CAPTACAO_1', 'UNREACHABLE','DIFICULDADE_DE_CAPTACAO_2','CAPTACAO_PENDENTE_RH',
+          'DIFICULDADE_DE_MONITORAMENTO_1', 'DIFICULDADE_DE_MONITORAMENTO_2', 'MONITORAMENTO_PENDENTE_RH'
+        ) ;;
   }
+
 
 # 2. Indicador para o Grupo 'Monitoramento Ativo'
   dimension: is_monitoramento_ativo {
     label: "Grupo: Monitoramento Ativo"
     type: yesno
-    sql: ${status_monitoramento} IN ('BEING_MONITORED', 'ACQUISITION', 'COORDINATED', 'MONITORING_DIFFICULTY_1', 'MONITORING_DIFFICULTY_2', 'PENDING_MONITORING_HR') ;;
+    sql: ${status_monitoramento} IN (
+          'MONITORADO','BEING_MONITORED',
+          'CAPTADO','ACQUISITION',
+          'COORDENADO', 'COORDINATED',
+          'DIFICULDADE_DE_MONITORAMENTO_1',
+          'DIFICULDADE_DE_MONITORAMENTO_2',
+          'MONITORAMENTO_PENDENTE_RH'
+        ) ;;
   }
 
 # 3. Indicador para o Grupo 'Dificuldade Monitoramento'
   dimension: is_dificuldade_monitoramento {
     label: "Grupo: Dificuldade Monitoramento"
     type: yesno
-    sql: ${status_monitoramento} IN ('MONITORING_DIFFICULTY_1', 'MONITORING_DIFFICULTY_2', 'PENDING_MONITORING_HR') ;;
+    sql: ${status_monitoramento} IN (
+          'DIFICULDADE_DE_MONITORAMENTO_1',
+          'DIFICULDADE_DE_MONITORAMENTO_2',
+          'MONITORAMENTO_PENDENTE_RH'
+        ) ;;
   }
 
 # 4. Indicador para o Grupo 'Dificuldade Captação'
   dimension: is_dificuldade_captacao {
     label: "Grupo: Dificuldade Captação"
     type: yesno
-    sql: ${status_monitoramento} IN ('ACQUISITION_DIFFICULTY_1', 'PENDING_ACQUISITION_HR', 'ACQUISITION_DIFFICULTY_2') ;;
+    sql: ${status_monitoramento} IN (
+          'DIFICULDADE_DE_CAPTACAO_1',
+          'UNREACHABLE',
+          'CAPTACAO_PENDENTE_RH',
+          'DIFICULDADE_DE_CAPTACAO_2'
+        ) ;;
   }
 
   dimension: rn_mes {
@@ -395,6 +430,7 @@ view: gerencial_monitoramento {
 
   ## Entradas e Saídas no Programa
 
+
   # Entradas mensais
   measure: entradas_mes {
     label: "Entradas no Programa (Primeiro Mês Ativo)"
@@ -404,16 +440,18 @@ view: gerencial_monitoramento {
           CASE
             WHEN ${rn_mes} = 1
              AND ${status_monitoramento} IN (
-                'ACQUISITION','BEING_MONITORED','COORDINATED', 'MONITORING_DIFFICULTY_1', 'MONITORING_DIFFICULTY_2',
-                'PENDING_MONITORING_HR'
+                'CAPTADO','ACQUISITION', 'MONITORADO','BEING_MONITORED', 'COORDENADO', 'COORDINATED'
+                'DIFICULDADE_DE_MONITORAMENTO_1', 'DIFICULDADE_DE_MONITORAMENTO_2',
+                'MONITORAMENTO_PENDENTE_RH'
              )
              AND FORMAT_TIMESTAMP('%Y-%m', ${status_criado_raw}) = (
                 SELECT MIN(FORMAT_TIMESTAMP('%Y-%m', sub.status_criado))
                 FROM `monitoramento.gerencial_monitoramento` AS sub
                 WHERE sub.person_id = ${person_id}
                   AND sub.status_monitoramento IN (
-                    'BEING_MONITORED','COORDINATED', 'MONITORING_DIFFICULTY_1', 'MONITORING_DIFFICULTY_2',
-                    'PENDING_MONITORING_HR'
+                    'MONITORADO','BEING_MONITORED', 'COORDENADO', 'COORDINATED'
+                'DIFICULDADE_DE_MONITORAMENTO_1', 'DIFICULDADE_DE_MONITORAMENTO_2',
+                'MONITORAMENTO_PENDENTE_RH'
                   )
              )
             THEN ${person_id}
@@ -429,16 +467,16 @@ view: gerencial_monitoramento {
           CASE
             WHEN ${rn_mes} = 1
              AND ${status_monitoramento} IN (
-                'DISCHARGED', 'SELF_DISCHARGED', 'MONITORING_ABANDONED',
-                'ACQUISITION_ABANDONED', 'NOT_ELIGIBLE', 'DECLINED'
+                'ALTA','SELF_DISCHARGED', 'DISCHARGED', 'ABANDONO_MONITORAMENTO',
+                'ABANDONO_CAPTACAO', 'REJEITADO', 'NOT_ELIGIBLE', 'RECUSA', 'DECLINED'
              )
              AND FORMAT_TIMESTAMP('%Y-%m', ${status_criado_raw}) = (
                 SELECT MIN(FORMAT_TIMESTAMP('%Y-%m', sub.status_criado))
                 FROM `monitoramento.gerencial_monitoramento` AS sub
                 WHERE sub.person_id = ${person_id}
                   AND sub.status_monitoramento IN (
-                    'DISCHARGED', 'SELF_DISCHARGED', 'MONITORING_ABANDONED',
-                    'ACQUISITION_ABANDONED', 'NOT_ELIGIBLE', 'DECLINED'
+                    'ALTA','SELF_DISCHARGED', 'DISCHARGED', 'ABANDONO_MONITORAMENTO',
+                'ABANDONO_CAPTACAO', 'REJEITADO', 'NOT_ELIGIBLE', 'RECUSA', 'DECLINED'
                   )
              )
             THEN ${person_id}
@@ -453,9 +491,9 @@ view: gerencial_monitoramento {
     sql:
       CASE
         WHEN ${status_monitoramento} IN (
-          'ACQUISITION','BEING_MONITORED', 'COORDINATED',
-          'MONITORING_DIFFICULTY_1', 'MONITORING_DIFFICULTY_2',
-          'PENDING_MONITORING_HR'
+           'CAPTADO','ACQUISITION', 'MONITORADO','BEING_MONITORED', 'COORDENADO', 'COORDINATED',
+                'DIFICULDADE_DE_MONITORAMENTO_1', 'DIFICULDADE_DE_MONITORAMENTO_2',
+                'MONITORAMENTO_PENDENTE_RH'
         )
         THEN ${person_id}
       END ;;
@@ -474,11 +512,13 @@ view: gerencial_monitoramento {
           WHERE sub.person_id = ${person_id}
         )
         AND ${status_monitoramento} IN (
-          'ACQUISITION','BEING_MONITORED', 'COORDINATED',
-          'MONITORING_DIFFICULTY_1', 'MONITORING_DIFFICULTY_2',
-          'PENDING_MONITORING_HR'
+          'CAPTADO','ACQUISITION', 'MONITORADO','BEING_MONITORED', 'COORDENADO', 'COORDINATED'
+                'DIFICULDADE_DE_MONITORAMENTO_1', 'DIFICULDADE_DE_MONITORAMENTO_2',
+                'MONITORAMENTO_PENDENTE_RH'
         )
-        THEN ${person_id}
+
+
+      THEN ${person_id}
       END ;;
   }
 
@@ -495,12 +535,13 @@ view: gerencial_monitoramento {
             WHERE sub.person_id = ${person_id}
           )
           AND ${status_monitoramento} IN (
-            'ELIGIBLE', 'ACQUISITION_DIFFICULTY_1',
-            'ACQUISITION_DIFFICULTY_2', 'ACQUISITION',
-            'PENDING_MONITORING_HR'
+            'ELIGIBLE', 'DIFICULDADE_DE_CAPTACAO_1', 'UNREACHABLE',
+            'DIFICULDADE_DE_CAPTACAO_2', 'CAPTADO', 'ACQUISITION',
+            'MONITORAMENTO_PENDENTE_RH'
           )
-          THEN ${person_id}
-        END ;;
+
+      THEN ${person_id}
+      END ;;
   }
 
   # % Total Participantes (Monitorados / Elegíveis)
@@ -802,99 +843,99 @@ view: gerencial_monitoramento {
   }
 
 #########
-  #Rejeitado pela enfermeira
+
+# Rejeitado pela enfermeira
   measure: rej_enfermeira {
     label: "Rejeitado pela enfermeira"
     type: count_distinct
     sql: ${person_id} ;;
-    filters: [status_monitoramento: "NOT_ELIGIBLE"]
+    filters: [status_monitoramento: "REJEITADO, NOT_ELIGIBLE"]
   }
 
-  #Monitoramento recusado
+# Monitoramento recusado
   measure: monitoramento_recusado {
     label: "Monitoramento Recusado"
     type: count_distinct
     sql: ${person_id} ;;
-    filters: [status_monitoramento: "DECLINED"]
+    filters: [status_monitoramento: "RECUSA, DECLINED"]
   }
 
-  #Dificuldade de contato Captação
+# Dificuldade de contato Captação
   measure: dificuldade_captacao {
     label: "Dificuldade de contato Captação"
     type: count_distinct
     sql: ${person_id} ;;
-    filters: [status_monitoramento: "ACQUISITION_DIFFICULTY_1,ACQUISITION_DIFFICULTY_2,PENDING_ACQUISITION_HR"]
+    filters: [status_monitoramento: "DIFICULDADE_DE_CAPTACAO_1, UNREACHABLE ,DIFICULDADE_DE_CAPTACAO_2,CAPTACAO_PENDENTE_RH"]
   }
 
-  #Pacientes Captados
+# Pacientes Captados
   measure: paciente_captados {
     label: "Pacientes Captados"
     type: count_distinct
     sql: ${person_id} ;;
-    filters: [status_monitoramento: "DISCHARGED,MONITORING_ABANDONED, ACQUISITION, BEING_MONITORED, COORDINATED, MONITORING_DIFFICULTY_1,  PENDING_MONITORING_HR,  MONITORING_DIFFICULTY_2,SELF_DISCHARGED"]
+    filters: [status_monitoramento: "ALTA,SELF_DISCHARGED, DISCHARGED,ABANDONO_MONITORAMENTO,CAPTADO, ACQUISITION,MONITORADO, BEING_MONITORED, COORDENADO,COORDINATED, DIFICULDADE_DE_MONITORAMENTO_1,MONITORAMENTO_PENDENTE_RH,DIFICULDADE_DE_MONITORAMENTO_2"]
   }
 
-#A Captar
+# A Captar
   measure: a_captar {
     label: "A Captar"
     type: number
-    sql: ${waterfall_20_elegiveis_telefone.Elegiveis_Acionaveis} - ${rej_enfermeira} - ${monitoramento_recusado} - ${dificuldade_captacao} ;;
+    sql: ${waterfall_20_elegiveis_telefone.Elegiveis_Acionaveis} - ${rej_enfermeira} - ${monitoramento_recusado} - ${dificuldade_captacao} - ${paciente_captados} ;;
   }
 
-  #Alta
+# Alta
   measure: alta {
     label: "Alta"
     type: count_distinct
     sql: ${person_id} ;;
-    filters: [status_monitoramento: "DISCHARGED,SELF_DISCHARGED"]
+    filters: [status_monitoramento: "ALTA,SELF_DISCHARGED, DISCHARGED"]
   }
 
-  #Abandono Monitoramento
+# Abandono Monitoramento
   measure: abandono_monitoramento {
     label: "Abandono Monitoramento"
     type: count_distinct
     sql: ${person_id} ;;
-    filters: [status_monitoramento: "MONITORING_ABANDONED"]
+    filters: [status_monitoramento: "ABANDONO_MONITORAMENTO"]
   }
 
-  #Monitoramento Ativo
+# Monitoramento Ativo
   measure: monitoramento_ativo {
     label: "Monitoramento Ativo"
     type: count_distinct
     sql: ${person_id} ;;
-    filters: [status_monitoramento: "ACQUISITION, BEING_MONITORED, COORDINATED, MONITORING_DIFFICULTY_1,  PENDING_MONITORING_HR,  MONITORING_DIFFICULTY_2"]
+    filters: [status_monitoramento: "CAPTADO, ACQUISITION,MONITORADO, BEING_MONITORED,COORDENADO,COORDINATED, ,DIFICULDADE_DE_MONITORAMENTO_1,MONITORAMENTO_PENDENTE_RH,DIFICULDADE_DE_MONITORAMENTO_2"]
   }
 
-  #Captado
+# Captado
   measure: captado {
     label: "Captado"
     type: count_distinct
     sql: ${person_id} ;;
-    filters: [status_monitoramento: "  ACQUISITION"]
+    filters: [status_monitoramento: "CAPTADO, ACQUISITION"]
   }
 
-  #Monitorados
+# Monitorados
   measure: monitoramentos {
     label: "Monitorados"
     type: count_distinct
     sql: ${person_id} ;;
-    filters: [status_monitoramento: "  BEING_MONITORED"]
+    filters: [status_monitoramento: "MONITORADO, BEING_MONITORED"]
   }
 
-  #Coordenados
+# Coordenados
   measure: coordenados {
     label: "Coordenados"
     type: count_distinct
     sql: ${person_id} ;;
-    filters: [status_monitoramento: "  COORDINATED"]
+    filters: [status_monitoramento: "COORDENADO, COORDINATED"]
   }
 
-  #Dificuldade de Contato Monitoramento
-  measure: dificuldade_de_contato_monitoramento{
+# Dificuldade de Contato Monitoramento
+  measure: dificuldade_de_contato_monitoramento {
     label: "Dificuldade de Contato Monitoramento"
     type: count_distinct
     sql: ${person_id} ;;
-    filters: [status_monitoramento: "  MONITORING_DIFFICULTY_1,  PENDING_MONITORING_HR,  MONITORING_DIFFICULTY_2"]
+    filters: [status_monitoramento: "DIFICULDADE_DE_MONITORAMENTO_1,MONITORAMENTO_PENDENTE_RH,DIFICULDADE_DE_MONITORAMENTO_2"]
   }
-
 }

@@ -14,12 +14,12 @@ view: tempo_primeiro_monitoramento {
         MIN(
           CASE
             WHEN b.status_monitoramento IN (
-              'ACQUISITION',
-              'BEING_MONITORED',
-              'COORDINATED',
-              'MONITORING_DIFFICULTY_1',
-              'MONITORING_DIFFICULTY_2',
-              'PENDING_MONITORING_HR'
+              'CAPTADO','ACQUISITION',
+              'MONITORADO','BEING_MONITORED',
+              'COORDENADO','COORDINATED',
+              'DIFICULDADE_DE_MONITORAMENTO_1',
+              'DIFICULDADE_DE_MONITORAMENTO_2',
+              'MONITORAMENTO_PENDENTE_RH'
             )
             AND CAST(b.status_criado AS TIMESTAMP) >= TIMESTAMP("2024-04-01 00:00:00")
             THEN CAST(b.status_criado AS TIMESTAMP)
@@ -27,17 +27,19 @@ view: tempo_primeiro_monitoramento {
         ),
         SECOND
       ) AS tempo_primeiro_monitoramento
-    FROM ${gerencial_monitoramento.SQL_TABLE_NAME} b
-    WHERE b.status_monitoramento IN (
-      'ACQUISITION',
-      'BEING_MONITORED',
-      'COORDINATED',
-      'MONITORING_DIFFICULTY_1',
-      'MONITORING_DIFFICULTY_2',
-      'PENDING_MONITORING_HR'
-    )
-    GROUP BY b.person_id
-    ;;
+
+      FROM ${gerencial_monitoramento.SQL_TABLE_NAME} b
+
+      WHERE b.status_monitoramento IN (
+      'CAPTADO','ACQUISITION',
+      'MONITORADO','BEING_MONITORED',
+      'COORDENADO','COORDINATED',
+      'DIFICULDADE_DE_MONITORAMENTO_1',
+      'DIFICULDADE_DE_MONITORAMENTO_2',
+      'MONITORAMENTO_PENDENTE_RH'
+      )
+
+      GROUP BY b.person_id;;
   }
 
   dimension: person_id {
