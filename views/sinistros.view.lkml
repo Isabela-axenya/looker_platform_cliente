@@ -302,6 +302,11 @@ view: sinistros {
     sql: ${TABLE}.Faixa_Etaria ;;
   }
 
+  dimension: faixa_etaria_filter {
+    type: string
+    sql: ${TABLE}.Faixa_Etaria ;;
+  }
+
   dimension: faixa_etaria_classificada {
     label: "Faixa Etária"
     type: string
@@ -347,7 +352,10 @@ view: sinistros {
     type: string
     sql: ${TABLE}.Genero ;;
   }
-
+  dimension: genero_filter {
+    type: string
+    sql: ${TABLE}.Genero ;;
+  }
   dimension: gestante_ou_parto {
     type: string
     sql: ${TABLE}.gestante_ou_parto ;;
@@ -693,6 +701,10 @@ view: sinistros {
     type: string
     sql: ${TABLE}.Tipo_Evento ;;
   }
+  dimension: tipo_evento_filter {
+    type: string
+    sql: ${TABLE}.Tipo_Evento ;;
+  }
 
   dimension: tipo_evento_dash_cliente {
     type: string
@@ -740,7 +752,10 @@ view: sinistros {
     type: string
     sql: ${TABLE}.Titularidade ;;
   }
-
+  dimension: titularidade_filter {
+    type: string
+    sql: ${TABLE}.Titularidade ;;
+  }
   dimension: usuario {
     type: string
     sql: UPPER(${TABLE}.Usuario) ;;
