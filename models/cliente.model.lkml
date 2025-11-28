@@ -78,8 +78,8 @@ explore: gerencial_monitoramento {
     {% endif %}
   ;;
 
-  join: beneficiarios_hub {
-    sql_on: ${gerencial_monitoramento.beneficiary_id} = ${beneficiarios_hub.beneficiary_id} ;;
+  join: populacao_hub {
+    sql_on: ${gerencial_monitoramento.beneficiary_id} = ${populacao_hub.beneficiary_id} ;;
     relationship: one_to_one
     type: left_outer
   }
