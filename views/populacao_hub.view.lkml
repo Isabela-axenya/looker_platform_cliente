@@ -29,6 +29,7 @@ view: populacao_hub {
   # Looker converts dates and timestamps to the specified timeframes within the dimension group.
 
   dimension_group: beneficiary_admission {
+    label: "Data de Admissão"
     type: time
     timeframes: [raw, time, date, week, month, quarter, year]
     sql: ${TABLE}.beneficiary_admission_date ;;
@@ -52,6 +53,7 @@ view: populacao_hub {
   }
 
   dimension: beneficiary_age_range {
+    label: "Faixa Etária"
     type: string
     sql: ${TABLE}.beneficiary_age_range ;;
   }
@@ -224,6 +226,7 @@ view: populacao_hub {
   }
 
   dimension: plan_name {
+    label: "Plano"
     type: string
     sql: ${TABLE}.plan_name ;;
   }
@@ -239,6 +242,7 @@ view: populacao_hub {
   }
 
   dimension: plan_type {
+    label: "Tipo de Plano"
     type: string
     sql: ${TABLE}.plan_type;;
   }
@@ -290,6 +294,7 @@ view: populacao_hub {
     value_format_name: "decimal_0"
   }
   measure: count_distinct_beneficiaries {
+    label: "Beneficiários"
     type: count_distinct
     sql: ${beneficiary_id} ;;
   }
@@ -297,6 +302,8 @@ view: populacao_hub {
     type: number
     sql: -1 * COUNT(DISTINCT CASE WHEN ${beneficiary_gender} = 'Masculino' THEN ${beneficiary_id} END) ;;
     value_format: "#,##0"
+    html: {% assign val = male_count_negative._value | abs %}
+    {{ val }};;
   }
   measure: female_count {
     type: count_distinct
@@ -306,6 +313,8 @@ view: populacao_hub {
   measure: titularidade_negativa {
     type: number
     sql: -COUNT(DISTINCT CASE WHEN INITCAP(${beneficiary_type}) = 'Titular' THEN ${beneficiary_id} END) ;;
+    html: {% assign val = titularidade_negativa._value | abs %}
+    {{ val }};;
   }
   measure: dependencia_positiva {
     type: count_distinct

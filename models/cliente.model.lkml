@@ -36,12 +36,6 @@ explore: populacao_hub {
       1=1
     {% endif %}
   ;;
-
-  always_filter: {
-    filters: [
-      plan_type: "saude"
-    ]
-  }
 }
 
 
