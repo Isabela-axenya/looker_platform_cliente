@@ -57,7 +57,10 @@ view: populacao_hub {
     type: string
     sql: ${TABLE}.beneficiary_age_range ;;
   }
-
+  dimension: beneficiary_age_range_filter {
+    type: string
+    sql: ${TABLE}.beneficiary_age_range ;;
+  }
   dimension: beneficiary_benefit_id_odonto {
     type: string
     sql: ${TABLE}.beneficiary_benefit_id_odonto ;;
@@ -122,6 +125,12 @@ view: populacao_hub {
   }
 
   dimension: beneficiary_gender {
+    label: "Gênero"
+    type: string
+    sql: ${TABLE}.beneficiary_gender ;;
+  }
+
+  dimension: beneficiary_gender_filter {
     type: string
     sql: ${TABLE}.beneficiary_gender ;;
   }
@@ -173,9 +182,16 @@ view: populacao_hub {
   }
 
   dimension: beneficiary_type {
+    label: "Titularidade"
     type: string
     sql: INITCAP(${TABLE}.beneficiary_type) ;;
   }
+
+  dimension: beneficiary_type_filter {
+    type: string
+    sql: INITCAP(${TABLE}.beneficiary_type) ;;
+  }
+
   dimension: beneficiary_retiree {
     type: string
     sql: INITCAP(${TABLE}.beneficiary_retiree) ;;
@@ -228,7 +244,7 @@ view: populacao_hub {
   dimension: plan_name {
     label: "Plano"
     type: string
-    sql: ${TABLE}.plan_name ;;
+    sql: UPPER(${TABLE}.plan_name) ;;
   }
 
   dimension: plan_operator_code {
@@ -242,11 +258,12 @@ view: populacao_hub {
   }
 
   dimension: plan_type {
-    label: "Tipo de Plano"
+    label: "Tipo de Plano Original"
     type: string
     sql: ${TABLE}.plan_type;;
   }
   dimension: plan_type_ajustado {
+    label: "Tipo de Plano"
     type: string
     sql: CASE
           WHEN ${TABLE}.plan_type IN ('vida','seguro_vida') THEN 'Seguro de Vida'
