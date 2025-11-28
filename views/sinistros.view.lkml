@@ -64,7 +64,13 @@ view: sinistros {
     type: average
     label: "Breakeven Média"
     sql: ${TABLE}.breakeven_empresa_operadora ;;
-    value_format_name: percent_2
+    value_format_name: percent_0
+  }
+  measure: breakeven_media_last {
+    type: average
+    label: "Breakeven Média"
+    sql: ${TABLE}.breakeven_empresa_operadora ;;
+    value_format_name: percent_0
   }
   dimension: carregado_em {
     type: number
@@ -298,6 +304,7 @@ view: sinistros {
   }
 
   dimension: faixa_etaria {
+    label: "Faixa Etária"
     type: string
     sql: ${TABLE}.Faixa_Etaria ;;
   }
@@ -707,6 +714,7 @@ view: sinistros {
   }
 
   dimension: tipo_evento_dash_cliente {
+    label: "Procedimento Médico"
     type: string
     sql: CASE
           WHEN ${TABLE}.Tipo_Evento IN ('Tax/Mat/Med','Outros Procedimentos') THEN 'Outros Procedimentos'
@@ -786,16 +794,32 @@ view: sinistros {
     value_format: "\"R$\" #,##0.00"
   }
 
-  measure: total_sinistro_milhoes {
+  measure: total_sinistro_dinamico {
     label: "Sinistro Total"
+    description: "Sinistro dinâmico para visualização com B M ou K"
     type: sum
-    sql: ${TABLE}.sinistro / 1000000 ;;
-    value_format: "\"R$\"0\" M\""
+    sql: ${TABLE}.sinistro ;;
+    value_format: "\"R$\" #,##0.00"
     html:
-    {{ total_sinistro._value
-         | format: "#,##0.00"
-         | prepend: "R$ "
-    }} ;;
+      {% assign v = total_sinistro._value %}
+
+      {% if v >= 1000000000 %}
+      {% assign n = v | divided_by: 1000000000 %}
+      R${{ n | round: 0 | format: "#,##0" }} Bilhões
+
+      {% elsif v >= 1000000 %}
+      {% assign n = v | divided_by: 1000000 %}
+      R${{ n | round: 0 | format: "#,##0" }} Milhões
+
+      {% elsif v >= 1000 %}
+      {% assign n = v | divided_by: 1000 %}
+      R${{ n | round: 0 | format: "#,##0" }} Mil
+
+      {% else %}
+      R${{ v | round: 0 | format: "#,##0" }}
+
+      {% endif %}
+    ;;
   }
 
   measure: sinistro_minimo {
