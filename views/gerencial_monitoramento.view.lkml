@@ -523,9 +523,12 @@ view: gerencial_monitoramento {
           WHERE sub.person_id = ${person_id}
         )
         AND ${status_monitoramento} IN (
-          'CAPTADO','ACQUISITION', 'MONITORADO','BEING_MONITORED', 'COORDENADO', 'COORDINATED',
-                'DIFICULDADE_DE_MONITORAMENTO_1', 'DIFICULDADE_DE_MONITORAMENTO_2',
-                'MONITORAMENTO_PENDENTE_RH'
+          'CAPTADO','ACQUISITION',
+          'MONITORADO','BEING_MONITORED',
+          'COORDENADO', 'COORDINATED',
+          'DIFICULDADE_DE_MONITORAMENTO_1', 'ACQUISITION_DIFFICULTY_1',
+          'MONITORAMENTO_PENDENTE_RH', 'PENDING_MONITORING_HR',
+          'DIFICULDADE_DE_MONITORAMENTO_2', 'ACQUISITION_DIFFICULTY_2'
         )
       THEN ${person_id}
       END ;;
@@ -544,10 +547,12 @@ view: gerencial_monitoramento {
             WHERE sub.person_id = ${person_id}
           )
           AND ${status_monitoramento} IN (
+            'CAPTADO','ACQUISITION',
             'ELIGIBLE', 'NOVO_PACIENTE',
-            'DIFICULDADE_DE_CAPTACAO_1', 'UNREACHABLE',
-            'DIFICULDADE_DE_CAPTACAO_2', 'CAPTADO', 'ACQUISITION',
-            'MONITORAMENTO_PENDENTE_RH'
+            'CAPTACAO_EM_ANDAMENTO',
+            'UNREACHABLE','ACQUISITION_DIFFICULTY_1', 'DIFICULDADE_DE_CAPTACAO_1',
+            'ACQUISITION_DIFFICULTY_2','DIFICULDADE_DE_CAPTACAO_2',
+            'PENDING_ACQUISITION_HR','CAPTACAO_PENDENTE_RH'
           )
 
       THEN ${person_id}
