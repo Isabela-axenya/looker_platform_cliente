@@ -37,6 +37,10 @@ view: afastados_com_soc {
     type: string
     sql: ${TABLE}.grupo_patologico_soc ;;
   }
+  dimension: grupo_patologico_soc_filter {
+    type: string
+    sql: ${TABLE}.grupo_patologico_soc ;;
+  }
   dimension: cod_estab {
     type: string
     sql: ${TABLE}.cod_estab ;;
