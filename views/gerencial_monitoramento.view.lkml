@@ -554,14 +554,13 @@ view: gerencial_monitoramento {
             'ACQUISITION_DIFFICULTY_2','DIFICULDADE_DE_CAPTACAO_2',
             'PENDING_ACQUISITION_HR','CAPTACAO_PENDENTE_RH'
           )
-
       THEN ${person_id}
       END ;;
   }
   #
-  measure: distinct_not_eligible_ultimo_status {
-    label: "Pessoas Não Elegíveis (Global)"
-    description: "Conta apenas pessoas cujo status mais recente (último registro do person_id em toda a base) está em um dos status de elegível (elegible || like acquisition)."
+  measure: distinct_eligible_restritivo_ultimo_status {
+    label: "Pessoas Elegíveis (Global) - ex não elegiveis"
+    description: "Conta apenas pessoas cujo status mais recente não é não elegível."
     type: count_distinct
     sql:
         CASE
@@ -570,8 +569,16 @@ view: gerencial_monitoramento {
             FROM `monitoramento.gerencial_monitoramento` AS sub
             WHERE sub.person_id = ${person_id}
           )
-          AND ${status_monitoramento} IN (
-            'REJEITADO','REJECTED','NOT_ELIGIBLE','INATIVO','INACTIVE','ALTA','DISCHARGED','RECUSA','DECLINED')
+          AND ${status_monitoramento} NOT IN (
+            'REJEITADO','REJECTED',
+            'NOT_ELIGIBLE',
+            'INATIVO','INACTIVE',
+            'ALTA','DISCHARGED', 'SELF_DISCHARGED',
+            'RECUSA','DECLINED',
+            'NON_ENGAGEMENT',
+            'ACQUISITION_ABANDONED','ABANDONO_CAPTACAO',
+            'MONITORING_ABANDONED','ABANDONO_MONITORAMENTO'
+            )
       THEN ${person_id}
       END ;;
   }
@@ -581,7 +588,7 @@ view: gerencial_monitoramento {
     label: "% de Participantes Sendo Monitorados"
     type: number
     value_format_name: percent_2
-    sql: ${distinct_being_monitored_ultimo_status} / NULLIF((${distinct_being_monitored_ultimo_status} + ${distinct_eligible_ultimo_status}), 0) ;;
+    sql: ${distinct_being_monitored_ultimo_status} / NULLIF(${distinct_eligible_restritivo_ultimo_status}, 0) ;;
   }
 
   dimension: include_in_analise {
