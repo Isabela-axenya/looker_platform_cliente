@@ -34,7 +34,18 @@ view: gerencial_monitoramento {
     sql:
     CASE
       WHEN LOWER(${TABLE}.company_name) = 'ultragaz corporate' THEN 'ultragaz'
+      WHEN LOWER(${TABLE}.company_name) = '14º tabelionato corporate' THEN '14º tabelionato'
       ELSE LOWER(${TABLE}.company_name)
+    END ;;
+  }
+
+  dimension: company_name_filter {
+    type: string
+    sql:
+    CASE
+      WHEN LOWER(${TABLE}.company_name) = 'ultragaz corporate' THEN 'Ultragaz'
+      WHEN LOWER(${TABLE}.company_name) = '14º tabelionato corporate' THEN '14º Cartório'
+      ELSE INITCAP(${TABLE}.company_name)
     END ;;
   }
 
@@ -512,12 +523,10 @@ view: gerencial_monitoramento {
           WHERE sub.person_id = ${person_id}
         )
         AND ${status_monitoramento} IN (
-          'CAPTADO','ACQUISITION', 'MONITORADO','BEING_MONITORED', 'COORDENADO', 'COORDINATED'
+          'CAPTADO','ACQUISITION', 'MONITORADO','BEING_MONITORED', 'COORDENADO', 'COORDINATED',
                 'DIFICULDADE_DE_MONITORAMENTO_1', 'DIFICULDADE_DE_MONITORAMENTO_2',
                 'MONITORAMENTO_PENDENTE_RH'
         )
-
-
       THEN ${person_id}
       END ;;
   }
@@ -535,7 +544,8 @@ view: gerencial_monitoramento {
             WHERE sub.person_id = ${person_id}
           )
           AND ${status_monitoramento} IN (
-            'ELIGIBLE', 'DIFICULDADE_DE_CAPTACAO_1', 'UNREACHABLE',
+            'ELIGIBLE', 'NOVO_PACIENTE',
+            'DIFICULDADE_DE_CAPTACAO_1', 'UNREACHABLE',
             'DIFICULDADE_DE_CAPTACAO_2', 'CAPTADO', 'ACQUISITION',
             'MONITORAMENTO_PENDENTE_RH'
           )
@@ -937,5 +947,10 @@ view: gerencial_monitoramento {
     type: count_distinct
     sql: ${person_id} ;;
     filters: [status_monitoramento: "DIFICULDADE_DE_MONITORAMENTO_1,MONITORAMENTO_PENDENTE_RH,DIFICULDADE_DE_MONITORAMENTO_2"]
+  }
+
+  measure: teste_modelo_cliente {
+    label: "teste"
+    sql: ${person_id} ;;
   }
 }
