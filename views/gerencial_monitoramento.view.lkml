@@ -553,6 +553,23 @@ view: gerencial_monitoramento {
       THEN ${person_id}
       END ;;
   }
+  #
+  measure: distinct_not_eligible_ultimo_status {
+    label: "Pessoas Não Elegíveis (Global)"
+    description: "Conta apenas pessoas cujo status mais recente (último registro do person_id em toda a base) está em um dos status de elegível (elegible || like acquisition)."
+    type: count_distinct
+    sql:
+        CASE
+          WHEN ${status_criado_raw} = (
+            SELECT MAX(sub.status_criado)
+            FROM `monitoramento.gerencial_monitoramento` AS sub
+            WHERE sub.person_id = ${person_id}
+          )
+          AND ${status_monitoramento} IN (
+            'REJEITADO','REJECTED','NOT_ELIGIBLE','INATIVO','INACTIVE','ALTA','DISCHARGED','RECUSA','DECLINED')
+      THEN ${person_id}
+      END ;;
+  }
 
   # % Total Participantes (Monitorados / Elegíveis)
   measure: monitored_among_eligible_rate {
