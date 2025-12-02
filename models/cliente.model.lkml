@@ -14,13 +14,7 @@ persist_with: cliente_default_datagroup
 explore: afastados_com_soc {
   label: "Afastados com SOC"
 
-  sql_always_where:
-    {% if _user_attributes['client_id'] != blank %}
-      ${afastados_com_soc.client_id} = '{{ _user_attributes['client_id'] }}'
-    {% else %}
-      1=1
-    {% endif %}
-  ;;
+  sql_always_where:   ${afastados_com_soc.client_id} = '{{ _user_attributes['client_id'] }}'  ;;
 }
 
 
@@ -29,12 +23,7 @@ explore: afastados_com_soc {
 ######################
 explore: populacao_hub {
 
-  sql_always_where:
-    {% if _user_attributes['client_id'] != blank %}
-      ${populacao_hub.client_id} = '{{ _user_attributes['client_id'] }}'
-    {% else %}
-      1=1
-    {% endif %}
+  sql_always_where:  ${populacao_hub.client_id} = '{{ _user_attributes['client_id'] }}'
   ;;
 }
 
@@ -43,12 +32,7 @@ explore: populacao_hub {
 # EXPLORE: SINISTROS
 ###################
 explore: sinistros {
-  sql_always_where:
-    {% if _user_attributes['client_id'] != blank %}
-      ${sinistros.client_id} = '{{ _user_attributes['client_id'] }}'
-    {% else %}
-      1=1
-    {% endif %}
+  sql_always_where:  ${sinistros.client_id} = '{{ _user_attributes['client_id'] }}'
   ;;
 }
 
@@ -71,11 +55,7 @@ explore: gerencial_monitoramento {
       OR UPPER(COALESCE(${enfermeira}, '')) LIKE '%TESTE%'
     )
     AND
-    {% if _user_attributes['client_id'] != blank %}
-      ${gerencial_monitoramento.client_id} = '{{ _user_attributes['client_id'] }}'
-    {% else %}
-      1=1
-    {% endif %}
+    ${gerencial_monitoramento.client_id} = '{{ _user_attributes['client_id'] }}'
   ;;
 
   join: beneficiarios_hub {
