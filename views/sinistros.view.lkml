@@ -715,12 +715,30 @@ view: sinistros {
 
   dimension: tipo_evento_dash_cliente {
     label: "Procedimento Médico"
+    order_by_field: tipo_evento_order
     type: string
     sql: CASE
           WHEN ${TABLE}.Tipo_Evento IN ('Tax/Mat/Med','Outros Procedimentos') THEN 'Outros Procedimentos'
           ELSE ${TABLE}.Tipo_Evento
           END;;
   }
+  dimension: tipo_evento_order {
+    label: "Ordem Procedimento Médico"
+    type: number
+    hidden: yes
+    sql: CASE
+        WHEN ${tipo_evento_dash_cliente} = 'Internação' THEN 1
+        WHEN ${tipo_evento_dash_cliente} = 'Exame' THEN 2
+        WHEN ${tipo_evento_dash_cliente} = 'Terapia' THEN 3
+        WHEN ${tipo_evento_dash_cliente} = 'Consulta' THEN 4
+        WHEN ${tipo_evento_dash_cliente} = 'Pronto Socorro' THEN 5
+        WHEN ${tipo_evento_dash_cliente} = 'Proc. Ambulatorial' THEN 6
+        WHEN ${tipo_evento_dash_cliente} = 'Outros Procedimentos' THEN 7
+        WHEN ${tipo_evento_dash_cliente} = 'Home Care' THEN 8
+        ELSE 999
+      END;;
+  }
+
 
   dimension: tipo_evento_in {
     type: number
