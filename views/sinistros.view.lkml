@@ -434,7 +434,12 @@ view: sinistros {
 
   dimension: perfil_epidemiologico {
     type: string
-    sql: ${TABLE}.Perfil_Epidemiologico ;;
+    sql: CASE
+            WHEN UPPER(${TABLE}.Perfil_Epidemiologico) = 'CHRONIC' THEN 'Crônico'
+            WHEN UPPER(${TABLE}.Perfil_Epidemiologico) = 'UNDETERMINED' THEN 'Indeterminado'
+            WHEN UPPER(${TABLE}.Perfil_Epidemiologico) = 'ACUTE' THEN 'Agudo'
+            ELSE INITCAP(${TABLE}.Perfil_Epidemiologico)
+          END;;
   }
 
   dimension: periodo {
@@ -461,7 +466,13 @@ view: sinistros {
 
   dimension: perpetuacao_gastos {
     type: string
-    sql: ${TABLE}.Perpetuacao_gastos ;;
+    sql:CASE
+            WHEN UPPER(${TABLE}.Perpetuacao_gastos) = 'HIGH' THEN 'Alto'
+            WHEN UPPER(${TABLE}.Perpetuacao_gastos) = 'MEDIUM' THEN 'Médio'
+            WHEN UPPER(${TABLE}.Perpetuacao_gastos) = 'LOW' THEN 'Baixo'
+            WHEN UPPER(${TABLE}.Perpetuacao_gastos) = 'UNDETERMINED' THEN 'Indeterminado'
+            ELSE INITCAP(${TABLE}.Perpetuacao_gastos)
+          END;;
   }
 
   dimension: plano {
