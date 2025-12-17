@@ -435,9 +435,9 @@ view: sinistros {
   dimension: perfil_epidemiologico {
     type: string
     sql: CASE
-            WHEN UPPER(${TABLE}.Perfil_Epidemiologico) = 'CHRONIC' THEN 'Crônico'
-            WHEN UPPER(${TABLE}.Perfil_Epidemiologico) = 'UNDETERMINED' THEN 'Indeterminado'
-            WHEN UPPER(${TABLE}.Perfil_Epidemiologico) = 'ACUTE' THEN 'Agudo'
+            WHEN UPPER(${TABLE}.Perfil_Epidemiologico) = 'CHRONIC' THEN 'Doença Crônica'
+            WHEN UPPER(${TABLE}.Perfil_Epidemiologico) = 'UNDETERMINED' THEN 'Indeterminada'
+            WHEN UPPER(${TABLE}.Perfil_Epidemiologico) = 'ACUTE' THEN 'Pontual'
             ELSE INITCAP(${TABLE}.Perfil_Epidemiologico)
           END;;
   }
