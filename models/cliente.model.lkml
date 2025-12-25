@@ -34,7 +34,7 @@ explore: populacao_hub {
 ###################
 explore: sinistros {
   sql_always_where:
-      ${sinistros.client_id} = '{{ _user_attributes['client_id'] }}';;
+   ${sinistros.client_id} = '{{ _user_attributes['client_id'] }}';;
 }
 
 

@@ -13,6 +13,13 @@ view: sinistros {
 
   dimension: agrupamento_internacao {
     type: string
+    sql: ${TABLE}.Agrupamento_Internacao ;;
+  }
+
+  dimension: media_sinistralidade_12m {
+    type: string
+    sql: ${TABLE}.media_sinistralidade_12m ;;
+    value_format_name: percent_0
   }
 
   dimension: atendto_domingo {
