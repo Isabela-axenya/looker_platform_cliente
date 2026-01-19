@@ -246,6 +246,7 @@ view: sinistros {
     sql: ${TABLE}.Descricao_Operadora ;;
   }
 
+
   dimension: dia_semana_atendto {
     type: string
     sql:
@@ -267,6 +268,15 @@ view: sinistros {
   dimension: dias_internacao {
     type: number
     sql: ${TABLE}.dias_internacao ;;
+  }
+
+  measure: diff_sinistralidade_vs_breakeven {
+    type: number
+    sql: SAFE_DIVIDE(
+        AVG(${TABLE}.sinistralidade_empresa_operadora) - AVG(${TABLE}.breakeven_empresa_operadora),
+        NULLIF(AVG(${TABLE}.breakeven_empresa_operadora), 0)
+      ) ;;
+    value_format_name: percent_1
   }
 
   dimension: eh_gestante {
@@ -619,18 +629,21 @@ view: sinistros {
 
   measure: sinistralidade_media {
     label: "Sinistralidade Média"
-    type: number
-    sql: AVG(${TABLE}.sinistralidade_empresa_operadora) ;;
+    type: average
+    sql: ${TABLE}.sinistralidade_empresa_operadora ;;
     value_format_name: percent_0
 
-    html: {{ rendered_value }} |
-          {% assign diff = sinistralidade_media._value | minus: breakeven_media._value | divided_by: breakeven_media._value %}
-          {% if diff > 0 %}
-            <span style="color:#e74c3c;">Alta sinistralidade – {{ diff | times: 100 | round: 1 }}% acima do breakeven</span>
-          {% else %}
-            <span style="color:#27ae60;">Baixa sinistralidade – {{ diff | abs | times: 100 | round: 1 }}% abaixo do breakeven</span>
-          {% endif %}
-        ;;
+    html:
+    {{ rendered_value }} |
+    {% assign diff = diff_sinistralidade_vs_breakeven._value | default: nil %}
+    {% if diff == nil %}
+      <span style="color:#7f8c8d;">Sem breakeven para comparação</span>
+    {% elsif diff > 0 %}
+      <span style="color:#e74c3c;">Alta sinistralidade – {{ diff | times: 100 | round: 1 }}% acima do breakeven</span>
+    {% else %}
+      <span style="color:#27ae60;">Baixa sinistralidade – {{ diff | abs | times: 100 | round: 1 }}% abaixo do breakeven</span>
+    {% endif %}
+  ;;
   }
 
 
