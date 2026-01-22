@@ -72,6 +72,7 @@ view: populacao_hub {
   }
 
   dimension_group: beneficiary_birth {
+    hidden: yes
     type: time
     timeframes: [raw, time, date, week, month, quarter, year]
     sql: ${TABLE}.beneficiary_birth_date ;;
@@ -98,6 +99,7 @@ view: populacao_hub {
   }
 
   dimension: beneficiary_cpf {
+    hidden: yes
     type: string
     sql: ${TABLE}.beneficiary_cpf ;;
   }
@@ -120,6 +122,7 @@ view: populacao_hub {
   }
 
   dimension: beneficiary_email {
+    hidden: yes
     type: string
     sql: ${TABLE}.beneficiary_email ;;
   }
@@ -141,11 +144,13 @@ view: populacao_hub {
   }
 
   dimension: beneficiary_holder_id {
+    hidden: yes
     type: string
     sql: ${TABLE}.beneficiary_holder_id ;;
   }
 
   dimension: beneficiary_id {
+    hidden: yes
     type: string
     sql: ${TABLE}.beneficiary_id ;;
   }
@@ -157,16 +162,19 @@ view: populacao_hub {
   }
 
   dimension: beneficiary_mother_name {
+    hidden: yes
     type: string
     sql: ${TABLE}.beneficiary_mother_name ;;
   }
 
   dimension: beneficiary_name {
+    hidden: yes
     type: string
     sql: ${TABLE}.beneficiary_name ;;
   }
 
   dimension: beneficiary_phones {
+    hidden: yes
     type: string
     sql: ${TABLE}.beneficiary_phones ;;
   }
@@ -202,6 +210,7 @@ view: populacao_hub {
   }
 
   dimension: card_number {
+    hidden: yes
     type: string
     sql: ${TABLE}.card_number ;;
   }
@@ -217,6 +226,7 @@ view: populacao_hub {
   }
 
   dimension: company_squad {
+    hidden: yes
     type: string
     sql: ${TABLE}.company_squad ;;
   }
@@ -383,13 +393,11 @@ view: populacao_hub {
   # ----- Sets of fields for drilling ------
   set: detail {
     fields: [
-      beneficiary_name,
       subclient_name,
       policy_name,
       subpolicy_name,
       plan_name,
-      operator_name,
-      beneficiary_mother_name
+      operator_name
     ]
   }
 

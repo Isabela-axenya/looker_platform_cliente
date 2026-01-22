@@ -54,6 +54,7 @@ view: waterfall_20_elegiveis_telefone {
   }
 
   dimension: beneficiary_name {
+    hidden: yes
     sql: ${TABLE}.name ;;
   }
 

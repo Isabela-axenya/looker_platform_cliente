@@ -25,8 +25,8 @@ view: pessoas_captadas {
   }
 
   dimension: company_name { sql: ${TABLE}.company_name ;; }
-  dimension: person_id {sql: ${TABLE}.person_id ;;}
-  dimension: name { sql: ${TABLE}.name ;; }
+  dimension: person_id {hidden: yes sql: ${TABLE}.person_id ;;}
+  dimension: name {hidden: yes  sql: ${TABLE}.name ;; }
   dimension: applied_questionnaire_status { sql: ${TABLE}.applied_questionnaire_status ;; }
   dimension: data_questionario { type: date sql: ${TABLE}.data_questionario ;; }
   dimension: status { sql: ${TABLE}.status ;; }

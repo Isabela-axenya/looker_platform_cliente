@@ -37,6 +37,7 @@ view: beneficiarios_hub {
   }
 
   dimension: beneficiary_id {
+    hidden:  yes
     primary_key: yes
     type: string
     sql: ${TABLE}.beneficiary_id ;;

@@ -82,6 +82,7 @@ view: gerencial_monitoramento {
   }
 
   dimension: person_id {
+    hidden:  yes
     primary_key: yes
     type: string
     sql: ${TABLE}.person_id ;;
@@ -146,7 +147,7 @@ view: gerencial_monitoramento {
 
   measure: count {
     type: count
-    drill_fields: [beneficiary_name, company_name]
+    drill_fields: [company_name]
   }
 
 ############## Cálculo de taxa de engajamento

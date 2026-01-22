@@ -19,6 +19,7 @@ view: aparicao_status_monitoramento {
   }
 
   dimension: person_id {
+    hidden:  yes
     primary_key: yes
     sql: ${TABLE}.person_id ;;
   }

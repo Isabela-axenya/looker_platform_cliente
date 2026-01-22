@@ -109,14 +109,17 @@ view: afastados_com_soc {
     sql: ${TABLE}.dias_uteis_mes ;;
   }
   dimension: id_empresa_empregado {
+    hidden:  yes
     type: string
     sql: ${TABLE}.id_empresa_empregado ;;
   }
   dimension: nome_beneficiario {
+    hidden:  yes
     type: string
     sql: ${TABLE}.nome_beneficiario ;;
   }
   dimension: funcao {
+    hidden:  yes
     type: string
     sql: ${TABLE}.funcao ;;
   }
@@ -125,6 +128,7 @@ view: afastados_com_soc {
     sql: ${TABLE}.cod_funcao ;;
   }
   dimension: matricula {
+    hidden:  yes
     type: string
     sql: ${TABLE}.matricula ;;
   }
@@ -137,6 +141,7 @@ view: afastados_com_soc {
     sql: ${TABLE}.data_admissao ;;
   }
   dimension: data_de_nascimento {
+    hidden:  yes
     type: date
     sql: ${TABLE}.data_de_nascimento ;;
   }
@@ -192,10 +197,12 @@ view: afastados_com_soc {
     sql: ${TABLE}.data_proxima_pericia_convocacao ;;
   }
   dimension: nome_normalizado {
+    hidden:  yes
     type: string
     sql: ${TABLE}.nome_normalizado ;;
   }
   dimension: responsavel {
+    hidden:  yes
     type: string
     sql: ${TABLE}.responsavel ;;
   }
@@ -288,6 +295,7 @@ view: afastados_com_soc {
     sql: ${TABLE}.convocacao_pelo_inssapenas_aposentados ;;
   }
   dimension: telefone_de_contato {
+    hidden:  yes
     type: string
     sql: ${TABLE}.telefone_de_contato ;;
   }

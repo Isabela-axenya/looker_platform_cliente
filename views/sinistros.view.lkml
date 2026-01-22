@@ -106,6 +106,7 @@ view: sinistros {
   }
 
   dimension: claim_id {
+    hidden: yes
     type: string
     sql: ${TABLE}.claim_id ;;
   }
@@ -613,11 +614,13 @@ view: sinistros {
   }
 
   dimension: senha {
+    hidden: yes
     type: string
     sql: ${TABLE}.Senha ;;
   }
 
   dimension: senha_parto {
+    hidden: yes
     type: string
     sql: ${TABLE}.senha_parto ;;
   }
@@ -834,7 +837,7 @@ view: sinistros {
   }
   measure: count {
     type: count
-    drill_fields: [beneficiary_name, cid_name]
+    drill_fields: [usuario, cid_name]
   }
 
   measure: total_sinistro {
