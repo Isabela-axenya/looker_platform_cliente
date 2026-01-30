@@ -220,7 +220,8 @@ view: afastados_com_soc {
       WHEN LOWER(${TABLE}.status_do_programa) = 'laranja' THEN 'Casos enviados para RH ou Jurídico'
       WHEN LOWER(${TABLE}.status_do_programa) = 'vermelho' THEN 'Sem contato / Envio de telegrama / Sem ciência do beneficiário'
       WHEN LOWER(${TABLE}.status_do_programa) = 'roxo' THEN 'Esgotadas tentativas / Recusa / Suspensão de benefício'
-      ELSE 'Não classificado'
+      WHEN LOWER(${TABLE}.status_do_programa) = 'cinza' THEN 'Não classificado'
+      ELSE LOWER(${TABLE}.status_do_programa)
     END ;;
     order_by_field: status_do_programa_ordem
     description: "Status do programa traduzido conforme classificação de cores e suas descrições."
