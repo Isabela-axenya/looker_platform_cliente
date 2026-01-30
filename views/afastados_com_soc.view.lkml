@@ -285,7 +285,7 @@ view: afastados_com_soc {
   }
   dimension: resultado {
     type: string
-    sql: ${TABLE}.resultado ;;
+    sql: TRIM(${TABLE}.resultado) ;;
   }
   dimension: data_da_previsao_de_alta {
     type: date
@@ -459,7 +459,7 @@ view: afastados_com_soc {
     type: count_distinct
     sql:
     CASE
-      WHEN  ${arquivo_origem} = 'work_leave' AND LOWER(${beneficio_inss}) = 'ativo'
+      WHEN  ${arquivo_origem} = 'work_leave' AND TRIM(LOWER(${beneficio_inss})) = 'ativo'
       THEN ${id_empresa_empregado}
     END ;;
     description: "Total de afastados com inss ativo."
