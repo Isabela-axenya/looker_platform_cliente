@@ -17,9 +17,28 @@ view: sinistros {
   }
 
   dimension: media_sinistralidade_12m {
-    type: string
+    type: number
     sql: ${TABLE}.media_sinistralidade_12m ;;
     value_format_name: percent_0
+  }
+
+  measure: kpi_media_sinistralidade_12m {
+    label: "Média Sinistralidade (12m)"
+    type: average_distinct
+    sql_distinct_key: concat(${empresa}, ${operadora}) ;;
+    sql: ${media_sinistralidade_12m} ;;
+    value_format_name: percent_0
+  }
+
+  measure: alerta_selecao_operadora {
+    view_label: "Alertas"
+    type: string
+    sql:
+    CASE
+      WHEN COUNT(DISTINCT ${operadora}) > 1
+      THEN '⚠️ Escolha uma Operadora por vez'
+      ELSE ''
+    END ;;
   }
 
   dimension: atendto_domingo {

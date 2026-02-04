@@ -23,6 +23,27 @@ view: afastados_com_soc {
     sql: ${TABLE}.competencia_arquivo ;;
     description: "Data de competência do arquivo recebido."
   }
+
+  dimension: periodo_de_competencia {
+    label: "Período de Competência"
+    description: "Permite escolher entre os últimos 12 meses do cliente ou o histórico completo"
+    type: string
+    sql:
+      CASE
+        WHEN DATE_TRUNC(${competencia_arquivo_date}, MONTH) >=
+             DATE_ADD(
+               DATE_TRUNC(
+                 (SELECT MAX(inner_tab.competencia_arquivo)
+                  FROM `elevated-oven-434719-m1.dashboard_health_team.afastados_com_soc` AS inner_tab
+                  WHERE inner_tab.client_id = ${TABLE}.client_id),
+                 MONTH),
+               INTERVAL -11 MONTH
+             )
+        THEN 'Últimos 12 Meses'
+        ELSE 'Mais de 12 meses'
+      END ;;
+  }
+
   dimension: competencia_ano_mes {
     label: "Competência (Ano-Mês)"
     type: string

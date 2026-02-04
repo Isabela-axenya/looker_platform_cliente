@@ -440,8 +440,9 @@ view: gerencial_monitoramento {
     sql: ${TABLE}.beneficiary_id ;;
   }
 
-  ## Entradas e Saídas no Programa
-
+  #################################
+  # Entradas e Saídas no Programa #
+  #################################
 
   # Entradas mensais
   measure: entradas_mes {
@@ -480,24 +481,73 @@ view: gerencial_monitoramento {
             WHEN ${rn_mes} = 1
              AND ${status_monitoramento} IN (
                 'ALTA','SELF_DISCHARGED', 'DISCHARGED', 'ABANDONO_MONITORAMENTO',
-                'ABANDONO_CAPTACAO', 'REJEITADO', 'NOT_ELIGIBLE', 'RECUSA', 'DECLINED'
+                'ABANDONO_CAPTACAO','NON_ENGAGEMENT'--, 'REJEITADO', 'NOT_ELIGIBLE', 'RECUSA', 'DECLINED'
              )
              AND FORMAT_TIMESTAMP('%Y-%m', ${status_criado_raw}) = (
                 SELECT MIN(FORMAT_TIMESTAMP('%Y-%m', sub.status_criado))
                 FROM `monitoramento.gerencial_monitoramento` AS sub
                 WHERE sub.person_id = ${person_id}
                   AND sub.status_monitoramento IN (
-                    'ALTA','SELF_DISCHARGED', 'DISCHARGED', 'ABANDONO_MONITORAMENTO',
-                'ABANDONO_CAPTACAO', 'REJEITADO', 'NOT_ELIGIBLE', 'RECUSA', 'DECLINED'
+                    'ALTA','SELF_DISCHARGED', 'DISCHARGED', 'ABANDONO_MONITORAMENTO','NON_ENGAGEMENT',
+                'ABANDONO_CAPTACAO'--,'REJEITADO', 'NOT_ELIGIBLE', 'RECUSA', 'DECLINED'
                   )
              )
             THEN ${person_id}
           END ;;
+    # Tooltip customizado via HTML
+        html:
+          <div style="font-family: Arial; font-size: 12px; line-height: 1.4;">
+            <strong>Total de Saídas:</strong> {{ rendered_value }}<br/>
+            <hr style="border: 0.5px solid #ccc; margin: 5px 0;"/>
+            <span style="color: #4CAF50;">●</span> <strong>Altas:</strong> {{ saidas_altas_detalhe._rendered_value }}<br/>
+            <span style="color: #FF9800;">●</span> <strong>Abandono:</strong> {{ saidas_abandono_detalhe._rendered_value }}
+          </div> ;;
+  }
+
+# Medida Auxiliar: Altas no Mês
+
+  measure: saidas_altas_detalhe {
+    hidden: yes
+    type: count_distinct
+    sql:
+      CASE
+        WHEN ${rn_mes} = 1
+        AND ${status_monitoramento} IN ('ALTA','DISCHARGED')
+        AND FORMAT_TIMESTAMP('%Y-%m', ${status_criado_raw}) = (
+            SELECT MIN(FORMAT_TIMESTAMP('%Y-%m', sub.status_criado))
+            FROM `monitoramento.gerencial_monitoramento` AS sub
+            WHERE sub.person_id = ${person_id}
+              AND sub.status_monitoramento IN ('ALTA','SELF_DISCHARGED', 'DISCHARGED', 'ABANDONO_MONITORAMENTO', 'NON_ENGAGEMENT',
+              'ABANDONO_CAPTACAO'--, 'REJEITADO', 'NOT_ELIGIBLE', 'RECUSA', 'DECLINED'
+              )
+        )
+        THEN ${person_id}
+      END ;;
+  }
+
+  # Medida Auxiliar: Abandono no Mês
+  measure: saidas_abandono_detalhe {
+    hidden: yes
+    type: count_distinct
+    sql:
+      CASE
+        WHEN ${rn_mes} = 1
+        AND ${status_monitoramento} IN ('SELF_DISCHARGED','NON_ENGAGEMENT','ABANDONO_MONITORAMENTO', 'ABANDONO_CAPTACAO')
+        AND FORMAT_TIMESTAMP('%Y-%m', ${status_criado_raw}) = (
+            SELECT MIN(FORMAT_TIMESTAMP('%Y-%m', sub.status_criado))
+            FROM `monitoramento.gerencial_monitoramento` AS sub
+            WHERE sub.person_id = ${person_id}
+              AND sub.status_monitoramento IN ('ALTA','SELF_DISCHARGED', 'DISCHARGED', 'ABANDONO_MONITORAMENTO', 'NON_ENGAGEMENT',
+              'ABANDONO_CAPTACAO'--, 'REJEITADO', 'NOT_ELIGIBLE', 'RECUSA', 'DECLINED'
+              )
+        )
+        THEN ${person_id}
+      END ;;
   }
 
   # Pessoas que estavam ativas
   measure: distinct_being_monitored {
-    label: "Pessoas Sendo Monitoradas (MoM)"
+    label: "Beneficiários em Navegação (MoM)"
     type: count_distinct
     description: "Conta person_id cujo último status do mês é de monitoramento ativo."
     sql:
@@ -513,7 +563,7 @@ view: gerencial_monitoramento {
 
   # Pessoas com último status ativo de monitoramento
   measure: distinct_being_monitored_ultimo_status {
-    label: "Pessoas Sendo Monitoradas (Global)"
+    label: "Beneficiários em Navegação (Global)"
     description: "Conta apenas pessoas cujo status mais recente (último registro em toda a base) está em um dos status de monitoramento ativo."
     type: count_distinct
     sql:
